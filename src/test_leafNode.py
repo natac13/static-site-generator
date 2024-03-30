@@ -32,6 +32,13 @@ class TestHTMLNode(unittest.TestCase):
         expected_html = '<a href="https://www.example.com">Click me!</a>'
         self.assertEqual(leaf_node.to_html(), expected_html)
 
+    def test_repr(self):
+        leaf_node = LeafNode("p", "Hello, World!", {"class": "my-class"})
+        self.assertEqual(
+            str(leaf_node),
+            "LeafNode(p, Hello, World!, {'class': 'my-class'})",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
