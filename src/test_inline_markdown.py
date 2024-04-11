@@ -6,6 +6,7 @@ from inline_markdown import (
     split_nodes_delimiter,
     split_nodes_images,
     split_nodes_links,
+    text_to_textnodes,
 )
 from textnode import (
     TextNode,
@@ -224,6 +225,64 @@ class TestInlineMarkdown(unittest.TestCase):
                 "https://www.example.com",
             ),
         ]
+        self.assertEqual(expected, actual)
+
+    def test_text_to_textnodes(self):
+        text = "This is **text** with an *italic* word and a `code block` and an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and a [link](https://boot.dev)"
+        expected = [
+            TextNode("This is ", text_type_text),
+            TextNode("text", text_type_bold),
+            TextNode(" with an ", text_type_text),
+            TextNode("italic", text_type_italic),
+            TextNode(" word and a ", text_type_text),
+            TextNode("code block", text_type_code),
+            TextNode(" and an ", text_type_text),
+            TextNode(
+                "image",
+                text_type_image,
+                "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png",
+            ),
+            TextNode(" and a ", text_type_text),
+            TextNode("link", text_type_link, "https://boot.dev"),
+        ]
+        actual = text_to_textnodes(text)
+        for i, node in enumerate(actual):
+            print(i, node)
+        self.assertEqual(expected, actual)
+
+    def test_text_to_textnodes_extreme(self):
+        text = """This is **text** with an *italic* word and a `code block` and an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and a [link](https://boot.dev) and **another bold** and *another italic* and `another code` and ![another image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and [another link](https://boot.dev)"""
+        expected = [
+            TextNode("This is ", text_type_text),
+            TextNode("text", text_type_bold),
+            TextNode(" with an ", text_type_text),
+            TextNode("italic", text_type_italic),
+            TextNode(" word and a ", text_type_text),
+            TextNode("code block", text_type_code),
+            TextNode(" and an ", text_type_text),
+            TextNode(
+                "image",
+                text_type_image,
+                "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png",
+            ),
+            TextNode(" and a ", text_type_text),
+            TextNode("link", text_type_link, "https://boot.dev"),
+            TextNode(" and ", text_type_text),
+            TextNode("another bold", text_type_bold),
+            TextNode(" and ", text_type_text),
+            TextNode("another italic", text_type_italic),
+            TextNode(" and ", text_type_text),
+            TextNode("another code", text_type_code),
+            TextNode(" and ", text_type_text),
+            TextNode(
+                "another image",
+                text_type_image,
+                "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png",
+            ),
+            TextNode(" and ", text_type_text),
+            TextNode("another link", text_type_link, "https://boot.dev"),
+        ]
+        actual = text_to_textnodes(text)
         self.assertEqual(expected, actual)
 
 
