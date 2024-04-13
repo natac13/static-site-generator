@@ -246,8 +246,8 @@ class TestInlineMarkdown(unittest.TestCase):
             TextNode("link", text_type_link, "https://boot.dev"),
         ]
         actual = text_to_textnodes(text)
-        for i, node in enumerate(actual):
-            print(i, node)
+        # for i, node in enumerate(actual):
+        #     print(i, node)
         self.assertEqual(expected, actual)
 
     def test_text_to_textnodes_extreme(self):
